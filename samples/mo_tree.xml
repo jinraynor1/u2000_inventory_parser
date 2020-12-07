@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<MOTree>
+    <MO className="BTS3900NE" fdn="NE=2408">
+        <attr name="fdn">NE=2408</attr>
+        <attr name="IP">10.231.0.22</attr>
+        <attr name="MOIndex">2153</attr>
+        <attr name="className">BTS3900NE</attr>
+        <attr name="latitude">1520.0</attr>
+        <attr name="longitude">12.0</attr>
+        <attr name="matchVersion">OSS_BTS3900_MATCH_ENG_V300R019C10SPC170</attr>
+        <attr name="name">MBTS_LI0657_PIEROLA</attr>
+        <attr name="neID">2153</attr>
+        <attr name="neType">BTS3900</attr>
+        <attr name="neVersion">BTS3900 V100R015C10SPC170</attr>
+        <attr name="GBTSVersion">BTS3900 V100R015C10SPC170</attr>
+        <attr name="NodeVersion">BTS3900 V100R015C10SPC170</attr>
+        <attr name="NodeBVersion">BTS3900 V100R015C10SPC170</attr>
+        <attr name="RFAVersion">BTS3900 V100R015C10SPC170</attr>
+        <attr name="eNodeBVersion">BTS3900 V100R015C10SPC170</attr>
+        <attr name="gNodeBVersion">BTS3900 V100R015C10SPC170</attr>
+        <attr name="realLatitude">0D0&apos;0&quot;S</attr>
+        <attr name="realLongitude">0D0&apos;0&quot;W</attr>
+        <attr name="DaylightSaveInfo">NO_///_///_/_/</attr>
+        <attr name="TimeZone">GMT_W_5_00</attr>
+        <MO className="BTS3900BBP" fdn="NE=2408,BBP=0_5_0">
+            <attr name="fdn">NE=2408,BBP=0_5_0</attr>
+            <attr name="CN">0</attr>
+            <attr name="MOIndex">2153_0_0_5</attr>
+            <attr name="SN">5</attr>
+            <attr name="SRN">0</attr>
+            <attr name="TYPE">UBBP</attr>
+            <attr name="className">BTS3900BBP</attr>
+            <attr name="name">Board Type=BBP, Cabinet No.=0, Subrack No.=0, Slot No.=5</attr>
+            <attr name="neID">2153</attr>
+        </MO>
+        <MO className="BTS3900BBP" fdn="NE=2408,BBP=0_4_0">
+            <attr name="fdn">NE=2408,BBP=0_4_0</attr>
+            <attr name="CN">0</attr>
+            <attr name="MOIndex">2153_0_0_4</attr>
+            <attr name="SN">4</attr>
+            <attr name="SRN">0</attr>
+            <attr name="TYPE">UBBP</attr>
+            <attr name="className">BTS3900BBP</attr>
+            <attr name="name">Board Type=BBP, Cabinet No.=0, Subrack No.=0, Slot No.=4</attr>
+            <attr name="neID">2153</attr>
+        </MO>
+        <MO className="BTS3900BBP" fdn="NE=2408,BBP=0_3_0">
+            <attr name="fdn">NE=2408,BBP=0_3_0</attr>
+            <attr name="CN">0</attr>
+            <attr name="MOIndex">2153_0_0_3</attr>
+            <attr name="SN">3</attr>
+            <attr name="SRN">0</attr>
+            <attr name="TYPE">UBBP</attr>
+            <attr name="className">BTS3900BBP</attr>
+            <attr name="name">Board Type=BBP, Cabinet No.=0, Subrack No.=0, Slot No.=3</attr>
+            <attr name="neID">2153</attr>
+        </MO>
+        <MO className="BTS3900BBP" fdn="NE=2408,BBP=0_2_0">
+            <attr name="fdn">NE=2408,BBP=0_2_0</attr>
+            <attr name="CN">0</attr>
+            <attr name="MOIndex">2153_0_0_2</attr>
+            <attr name="SN">2</attr>
+            <attr name="SRN">0</attr>
+            <attr name="TYPE">UBBP</attr>
+            <attr name="className">BTS3900BBP</attr>
+            <attr name="name">Board Type=BBP, Cabinet No.=0, Subrack No.=0, Slot No.=2</attr>
+            <attr name="neID">2153</attr>
+        </MO>
+        <MO className="BTS3900BBP" fdn="NE=2408,BBP=0_0_0">
+            <attr name="fdn">NE=2408,BBP=0_0_0</attr>
+            <attr name="CN">0</attr>
+            <attr name="MOIndex">2153_0_0_0</attr>
+            <attr name="SN">0</attr>
+            <attr name="SRN">0</attr>
+            <attr name="TYPE">LBBP</attr>
+            <attr name="className">BTS3900BBP</attr>
+            <attr name="name">Board Type=BBP, Cabinet No.=0, Subrack No.=0, Slot No.=0</attr>
+            <attr name="neID">2153</attr>
+
+        </MO>
+    </MO>
+</MOTree>

@@ -1,0 +1,4 @@
+.idea/
+vendor/
+config/database.php
+config/file_scanner.sample.php
