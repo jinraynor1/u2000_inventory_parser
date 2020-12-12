@@ -14,6 +14,7 @@
     }
   ],
   "require": {
+    "ext-xmlreader": "*",
     "monolog/monolog": "^1.25",
     "dorantor/filelock": "^1.0",
     "mrjgreen/config": "^2.0",

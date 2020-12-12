@@ -20,23 +20,35 @@ class ParserDataPacketTable extends \PHPUnit_Framework_TestCase
     private $parser;
     public function setUp()
     {
-        $this->xmlFileMoTree = new \SplFileInfo(APP_PATH .'/samples/mo_tree.xml');
         $this->xmlFileDataPacketTable = new \SplFileInfo(APP_PATH .'/samples/datapacket.xml');
         $this->parser = $this->getMockBuilder('\\App\\Parsers\\ParserDataPacketTable')
-        ->disableOriginalConstructor()
+            ->setConstructorArgs(array($this->xmlFileDataPacketTable))
             ->setMethods(null)
             ->getMock();
 
 
     }
-
+    public function testParse()
+    {
+        foreach ($this->parser as $item){
+            var_dump($item);
+            $this->assertInstanceOf('\\App\\Mappers\\MappingTableInterface',$item);
+        }
+    }
     public function testSuccessfullyIdentifyXML()
     {
-        $this->assertTrue($this->parser->detect($this->xmlFileDataPacketTable));
+        $this->assertTrue($this->parser->detect());
     }
 
     public function testFailsIdentifyWrongXML()
     {
-        $this->assertFalse($this->parser->detect($this->xmlFileMoTree));
+        $xmlFileMoTree = new \SplFileInfo(APP_PATH .'/samples/mo_tree.xml');
+
+        $wrong_parser = $this->getMockBuilder('\\App\\Parsers\\ParserDataPacketTable')
+            ->setConstructorArgs(array($xmlFileMoTree))
+            ->setMethods(null)
+            ->getMock();
+        $this->assertFalse($wrong_parser->detect());
+
     }
 }
