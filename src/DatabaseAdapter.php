@@ -99,6 +99,15 @@ class DatabaseAdapter implements DatabaseInterface
         return $stmt;
     }
 
+    /**
+     * @param $sql
+     * @return false2|\PDOStatement
+     */
+    public function query($sql)
+    {
+        return $this->db->query($sql);
+    }
+
     public function getAll($sql, $class_name = 'stdClass')
     {
         $stmt = $this->db->query($sql);

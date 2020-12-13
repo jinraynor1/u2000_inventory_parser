@@ -26,9 +26,20 @@ class ParserDataPacketTable   extends AbstractInventoryParser implements Invento
     private $doc;
 
     /**
+     * @var MappingColumn
+     */
+    private $columnMBTS;
+
+    /**
+     * @var MappingColumn
+     */
+    private $columnDate;
+
+    /**
      * @var int
      */
     private $position=0;
+
     /**
      * @var array
      */
@@ -86,6 +97,9 @@ class ParserDataPacketTable   extends AbstractInventoryParser implements Invento
 
         $table = new MappingTable($this->buffer_row["@attributes"]["attrname"]);
 
+        $table->appendColumn($this->columnMBTS);
+        $table->appendColumn($this->columnDate);
+
         //if no more elements empty the buffer
         if(empty($this->buffer_row["ROWDATA"]["ROW"])){
            $this->buffer_row = array();
@@ -118,9 +132,7 @@ class ParserDataPacketTable   extends AbstractInventoryParser implements Invento
             $this->z->next('TABLE');
         }
 
-
         $this->position++ ;
-        if($this->position> 1000) die("error");
     }
 
     function valid()
@@ -136,13 +148,21 @@ class ParserDataPacketTable   extends AbstractInventoryParser implements Invento
 
         $this->z->open($this->fileInfo->getRealPath());
 
-/*
-        while ($this->z->read() && $this->z->nodeType != \XMLReader::END_ELEMENT) {
-        }
-*/
         while ($this->z->read() && $this->z->name != 'TABLE') {
-        }
+            if($this->z->name =='NE' && $this->z->nodeType != \XMLReader::END_ELEMENT){
 
+
+                // extract mbts column
+                $this->columnMBTS = new MappingColumn("mbts");
+                $this->columnMBTS->setValue($this->z->getAttribute("NEName"));
+
+            }
+
+
+        }
+        $this->columnDate = new MappingColumn("registerDate");
+        $this->columnDate->setValue(date('Y-m-d H:i:s'));
+        $this->columnDate->setType(MappingColumn::COLUMN_TYPE_DATE);
         $this->position = 0;
     }
 }

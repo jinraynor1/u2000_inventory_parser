@@ -24,6 +24,16 @@ class ParserMoTree extends AbstractInventoryParser implements InventoryParserInt
     private $doc;
 
     /**
+     * @var MappingColumn
+     */
+    private $columnMBTS;
+
+    /**
+     * @var MappingColumn
+     */
+    private $columnDate;
+
+    /**
      * @var int
      */
     private $position=0;
@@ -41,11 +51,26 @@ class ParserMoTree extends AbstractInventoryParser implements InventoryParserInt
         $this->z->open($this->fileInfo->getRealPath());
 
 
-        while ($this->z->read() && $this->z->nodeType != \XMLReader::END_ELEMENT) {
-        }
+        //move to first mo
+        while ($this->z->read() && $this->z->name != 'MO') ;
 
-        while ($this->z->read() && $this->z->name != 'MO') {
+        // move to inner MO
+        while ($this->z->read() && $this->z->name != 'MO' ) {
+
+            //loop the <attr> tag before the inner mo
+            if($this->z->name =='attr' && $this->z->nodeType != \XMLReader::END_ELEMENT){
+
+                // extract mbts column
+                if( $this->z->getAttribute("name")  == 'name'){
+                    $this->columnMBTS = new MappingColumn("mbts");
+                    $this->columnMBTS->setValue($this->z->readString());
+                }
+
+            }
         }
+        $this->columnDate = new MappingColumn("registerDate");
+        $this->columnDate->setValue(date('Y-m-d H:i:s'));
+        $this->columnDate->setType(MappingColumn::COLUMN_TYPE_DATE);
 
         $this->position = 0;
     }
@@ -56,7 +81,11 @@ class ParserMoTree extends AbstractInventoryParser implements InventoryParserInt
     function current()
     {
         $simple_xml =  simplexml_import_dom($this->doc->importNode($this->z->expand(), true));
+
         $table = new MappingTable("mo_tree");
+        $table->appendColumn($this->columnMBTS);
+        $table->appendColumn($this->columnDate);
+
         foreach ($simple_xml as $item){
            // $childrens = $item->children();
 
@@ -83,7 +112,7 @@ class ParserMoTree extends AbstractInventoryParser implements InventoryParserInt
 
     function valid()
     {
-        return $this->z->name === 'MO';
+        return $this->z->nodeType != \XMLReader::END_ELEMENT &&   $this->z->name === 'MO';
     }
 
     public function parse()

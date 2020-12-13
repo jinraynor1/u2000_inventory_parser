@@ -8,6 +8,10 @@ class MappingColumn implements  MappingColumnInterface
 {
     private $columnName;
     private $columnValue;
+    private $columnType;
+
+    const COLUMN_TYPE_VARCHAR = 1;
+    const COLUMN_TYPE_DATE = 2;
 
     public function __construct($columnName)
     {
@@ -27,6 +31,16 @@ class MappingColumn implements  MappingColumnInterface
     public function setValue($value)
     {
         $this->columnValue = $value;
+    }
+
+    public function setType($type)
+    {
+        $this->columnType = $type;
+    }
+
+    public function getType()
+    {
+        return $this->columnType;
     }
 
 

@@ -12,14 +12,15 @@ use ArrayIterator;
 class MappingTableCollection implements MappingTableCollectionInterface
 {
 
-    private $tables;
+    private $tables = array();
 
     /**
      * MappingTableCollection constructor.
      * @param MappingTableInterface[]
      */
-    public function __construct(array $tables)
+    public function __construct(array $tables = array())
     {
+
         foreach ($tables as $table)
             $this->tables[$table->getName()] = $table;
     }
@@ -38,11 +39,19 @@ class MappingTableCollection implements MappingTableCollectionInterface
         return array_key_exists($offset, $this->tables);
     }
 
+    /**
+     * @param mixed $offset
+     * @return MappingTable
+     */
     public function offsetGet($offset)
     {
         return $this->tables[$offset];
     }
 
+    /**
+     * @param mixed $offset
+     * @param mixed MappingTable
+     */
     public function offsetSet($offset, $value)
     {
         $this->tables[$offset] = $value;
@@ -63,8 +72,12 @@ class MappingTableCollection implements MappingTableCollectionInterface
         if(!$this->mappingTableExists($mappingTable)){
             return false;
         }
+        $table = $this->tables[$mappingTable->getName()];
+        return $table->columnExist($mappingColumn);
 
+        /*
         foreach ($mappingTable->getColumns() as $column){
+
             if($column->getName() == $mappingColumn->getName()){
                 return true;
             }
@@ -72,5 +85,6 @@ class MappingTableCollection implements MappingTableCollectionInterface
 
 
         return false;
+        */
     }
 }

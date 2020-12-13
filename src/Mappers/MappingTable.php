@@ -7,10 +7,16 @@ namespace App\Mappers;
 class MappingTable implements  MappingTableInterface
 {
     private $tableName;
+
     /**
      * @var MappingColumn[]
      */
     private $columns = array();
+
+    /**
+     * @var MappingColumn[]
+     */
+    private $indexes = array();
 
     public function __construct($tableName)
     {
@@ -27,9 +33,19 @@ class MappingTable implements  MappingTableInterface
         $this->columns[$mappingColumn->getName()] = $mappingColumn;
     }
 
+    public function appendIndex(MappingColumnInterface $mappingColumn)
+    {
+        $this->indexes[$mappingColumn->getName()] = $mappingColumn;
+    }
+
     public function getColumns()
     {
         return $this->columns;
+    }
+
+    public function getIndexes()
+    {
+        return $this->indexes;
     }
 
     /**
@@ -42,6 +58,12 @@ class MappingTable implements  MappingTableInterface
             $map[$column->getName()] = $column->getValue();
         }
         return $map;
+    }
+
+    public function columnExist(MappingColumnInterface $mappingColumn)
+    {
+        return isset($this->columns[$mappingColumn->getName()] );
+
     }
 
 
