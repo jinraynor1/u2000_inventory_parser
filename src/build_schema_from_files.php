@@ -48,7 +48,8 @@ foreach ($fileList as $fileInfo){
 }
 
 $database = $container->get('database.master');
-$specificSchemaLoader = new \App\Loaders\SqliteSchemaLoader($database);
+$specificSchemaLoader = new \App\Loaders\OracleSchemaLoader($database);
+//$specificSchemaLoader = new \App\Loaders\SqliteSchemaLoader($database);
 $schemaLoader = new \App\Loaders\SchemaLoader( $mappingTableCollection, $specificSchemaLoader);
 $schemaLoader->load();
 

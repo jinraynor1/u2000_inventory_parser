@@ -21,10 +21,10 @@ $logger->pushHandler(new \Monolog\Handler\RotatingFileHandler(
 
 // build dependencies
 $builder = new DI\ContainerBuilder();
-$builder->setDefinitionCache(new Doctrine\Common\Cache\ArrayCache());
+
 $builder->useAutowiring(false);
 $builder->useAnnotations(false);
-$builder->addDefinitions(ROOT_PATH . '/dependencies.php');
+$builder->addDefinitions(APP_PATH . '/dependencies.php');
 $container = $builder->build();
 
 $container->set('app.config', $config);

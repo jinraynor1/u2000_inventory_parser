@@ -43,5 +43,10 @@ class MappingColumn implements  MappingColumnInterface
         return $this->columnType;
     }
 
+    public function isDatetime()
+    {
+        return $this->columnType == self::COLUMN_TYPE_DATE;
+    }
+
 
 }

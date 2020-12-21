@@ -1,0 +1,18 @@
+<phpunit bootstrap="vendor/autoload.php">
+
+    <testsuites>
+        <testsuite name="default">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+    <php>
+        <const  name="PHPUNIT_INVENTORY_PARSER_TESTSUITE" value="true"/>
+        <env name="DATABASE_USER" value="smithj"/>
+        <env name="DATABASE_PASS" value="pwd4smithj"/>
+        <env name="DATABASE_DSN" value="//localhost:1521/xe"/>
+        <env name="DATABASE_DRIVER" value="oci"/>
+        <env name="DATABASE_QUOTE_IDENTIFIER" value='"'/>
+
+
+    </php>
+</phpunit>

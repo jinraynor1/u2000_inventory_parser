@@ -67,4 +67,9 @@ class MysqlSchemaLoaderInterface implements SchemaLoaderInterface
 
         return $result->exists > 0;
     }
+
+    public function getSchemaTables()
+    {
+        // TODO: Implement getSchemaTables() method.
+    }
 }

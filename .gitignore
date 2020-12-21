@@ -2,3 +2,6 @@
 vendor/
 config/database.php
 config/file_scanner.sample.php
+src/database.sqlite
+database.sqlite
+phpunit.xml

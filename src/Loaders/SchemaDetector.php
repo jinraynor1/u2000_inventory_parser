@@ -5,6 +5,8 @@ namespace App\Loaders;
 
 
 use App\Mappers\MappingTableCollection;
+use App\Parsers\FactoryParser;
+use App\Parsers\InventoryParserInterface;
 use App\Parsers\ParserDataPacketTable;
 use App\Parsers\ParserMoTree;
 
@@ -20,6 +22,8 @@ class SchemaDetector
         $this->fileList = $fileList;
     }
 
+
+
     /**
      * @return MappingTableCollection
      */
@@ -29,19 +33,9 @@ class SchemaDetector
 
         foreach ($this->fileList as $fileInfo){
 
-            $detected_parser = null;
+            $detected_parser = FactoryParser::getParserForFile($fileInfo);
 
-            $parserDataPacket = new ParserDataPacketTable($fileInfo);
-            $parserMoTree = new ParserMoTree($fileInfo);
-
-            if($parserDataPacket->detect()) {
-                $detected_parser = $parserDataPacket;
-            }elseif ($parserMoTree->detect()){
-                $detected_parser = $parserMoTree;
-            }else{
-                // no parser for the file ignore it
-                break;
-            }
+            if(!$detected_parser) break;
 
             foreach ($detected_parser as $table){
                 if(!isset($mappingTableCollection[$table->getName()])){

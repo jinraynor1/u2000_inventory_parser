@@ -5,12 +5,14 @@ return array(
     'master' =>
         array(
             'driver' => 'oci',
-            'hostname' => '127.0.0.1',
-            'port' => '1521',
-            'username' => 'root',
-            'password' => 'root',
-            'database' => 'inventory',
+            'username' => 'your_username',
+            'password' => 'your_password',
+            'dsn' => '//localhost:1521/xe',
+            'quote_identifier_character' => '"',
+            'query_session' => array(
+                "alter session set nls_date_format='YYYY/MM/DD HH24:MI:SS')"
+            )
 
-        )
+        ),
 
 );

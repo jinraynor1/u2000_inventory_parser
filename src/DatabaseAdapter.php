@@ -12,10 +12,16 @@ class DatabaseAdapter implements DatabaseInterface
      */
     private $db;
 
-    public function __construct(\PDO $db)
+    /**
+     * @var string
+     */
+    private $quote_identifier_character;
+
+    public function __construct(\PDO $db, $quote_identifier_character)
     {
 
         $this->db = $db;
+        $this->quote_identifier_character = $quote_identifier_character;
     }
 
     /**
@@ -26,8 +32,11 @@ class DatabaseAdapter implements DatabaseInterface
      */
     public function insert($table,array $data)
     {
-        //add columns into comma seperated string
-        $columns = implode(',', array_keys($data));
+        $that = $this;
+        $columns  = implode(',',array_map(function ($val) use ($that) {
+            return $that->quoteIdentifier($val);
+        }, array_keys($data)));
+
 
         //get values
         $values = array_values($data);
@@ -39,9 +48,11 @@ class DatabaseAdapter implements DatabaseInterface
         //convert array into comma seperated string
         $placeholders = implode(',', array_values($placeholders));
 
-        $this->run("INSERT INTO $table ($columns) VALUES ($placeholders)", $values);
+        $table = $this->quoteIdentifier($table);
 
-        return $this->db->lastInsertId();
+        return  $this->run("INSERT INTO  $table($columns) VALUES ($placeholders)", $values);
+
+
     }
 
     /**
@@ -75,9 +86,8 @@ class DatabaseAdapter implements DatabaseInterface
             $i++;
         }
 
-        $stmt = $this->run("UPDATE $table SET $fieldDetails WHERE $whereDetails", $values);
+        return $this->run("UPDATE $table SET $fieldDetails WHERE $whereDetails", $values);
 
-        return $stmt->rowCount();
     }
 
     /**
@@ -121,5 +131,18 @@ class DatabaseAdapter implements DatabaseInterface
         if (!$stmt) return false;
         return $stmt->fetchObject($class_name);
     }
+
+    public function quoteIdentifier($identifier)
+    {
+        return sprintf("%s$identifier%s",$this->quote_identifier_character,$this->quote_identifier_character);
+
+    }
+
+    public function getDriver()
+    {
+        return $this->db->getAttribute(\PDO::ATTR_DRIVER_NAME);
+
+    }
+
 
 }

@@ -11,5 +11,7 @@ interface DatabaseInterface
     public function getAll($sql, $class_name = 'stdClass');
     public function get($sql, $class_name = 'stdClass');
     public function query($sql);
+    public function quoteIdentifier($identifier);
+    public function getDriver();
 
 }

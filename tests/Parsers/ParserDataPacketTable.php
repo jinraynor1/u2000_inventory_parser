@@ -31,7 +31,6 @@ class ParserDataPacketTable extends \PHPUnit_Framework_TestCase
     public function testParse()
     {
         foreach ($this->parser as $item){
-            var_dump($item);
             $this->assertInstanceOf('\\App\\Mappers\\MappingTableInterface',$item);
         }
     }

@@ -21,8 +21,10 @@ $tables_schema->appendColumn(new \App\Mappers\MappingColumn("MOIndex"));
 
 $mappingTableCollection = new \App\Mappers\MappingTableCollection(array($tables_schema));
 */
-$specificSchemaLoader = new \App\Loaders\SqliteSchemaLoader($db);
+//$specificSchemaLoader = new \App\Loaders\SqliteSchemaLoader($db);
+$specificSchemaLoader = new \App\Loaders\OracleSchemaLoader($db);
 $mappingTableCollection = $specificSchemaLoader->getSchemaTables();
+
 
 $loader = new \App\Loaders\DBLoader($db, $mappingTableCollection);
 
