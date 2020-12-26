@@ -1,4 +1,4 @@
-<phpunit bootstrap="vendor/autoload.php">
+<phpunit bootstrap="bootstrap.php">
 
     <testsuites>
         <testsuite name="default">
@@ -6,7 +6,36 @@
         </testsuite>
     </testsuites>
     <php>
-        <server name="APP_ENV" value="development"/>
+        <const name="PHPUNIT_YOURAPPLICATION_TESTSUITE" value="true"/>
+
+        <!-- ORACLE -->
+
+        <env name="DATABASE_ORACLE_USER" value="smithj"/>
+        <env name="DATABASE_ORACLE_PASS" value="pwd4smithj"/>
+        <env name="DATABASE_ORACLE_DSN" value="dbname=(DESCRIPTION =(ADDRESS_LIST =(ADDRESS = (PROTOCOL = TCP)(HOST = oracle)(PORT = 1521)))(CONNECT_DATA =(SERVICE_NAME = xe)) )"/>
+        <env name="DATABASE_ORACLE_DRIVER" value="oci"/>
+        <env name="DATABASE_ORACLE_QUOTE_IDENTIFIER" value='"'/>
+        <env name="DATABASE_ORACLE_QUERIES_SESSION" value="[&quot;alter session set nls_date_format='YYYY/MM/DD HH24:MI:SS'&quot;]"/>
+
+
+
+        <!-- MYSQL -->
+
+        <env name="DATABASE_MYSQL_USER" value="smithj"/>
+        <env name="DATABASE_MYSQL_PASS" value="pwd4smithj"/>
+        <env name="DATABASE_MYSQL_DSN" value="host=mysql;port=3306;dbname=inventario"/>
+        <env name="DATABASE_MYSQL_DRIVER" value="mysql"/>
+        <env name="DATABASE_MYSQL_QUOTE_IDENTIFIER" value='`'/>
+
+
+        <!-- SQLITE -->
+
+        <env name="DATABASE_SQLITE_USER" value=""/>
+        <env name="DATABASE_SQLITE_PASS" value=""/>
+        <env name="DATABASE_SQLITE_DSN" value=":memory:"/>
+        <env name="DATABASE_SQLITE_DRIVER" value="sqlite"/>
+        <env name="DATABASE_SQLITE_QUOTE_IDENTIFIER" value='`'/>
+
 
     </php>
 </phpunit>

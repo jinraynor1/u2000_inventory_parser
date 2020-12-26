@@ -82,10 +82,9 @@ class SqliteSchemaLoader implements SchemaLoaderInterface
         $map  = new MappingTableCollection();
         if(!$tables) return $map;
 
-
         foreach ($tables as $table){
 
-            $sql = "SELECT name  FROM pragma_table_info('{$table->tbl_name}') ";
+            $sql = "PRAGMA Table_Info('{$table->tbl_name}') ";
             $columns  = $this->database->getAll($sql);
 
             if(!$columns) continue;

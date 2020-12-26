@@ -36,6 +36,10 @@ class FactorySchemaLoader
                 $schemaLoader =  new OracleSchemaLoader($this->database);
             break;
 
+            case 'mysql' :
+                $schemaLoader =  new MysqlSchemaLoader($this->database);
+                break;
+
             case 'sqlite' :
                 $schemaLoader =  new SqliteSchemaLoader($this->database);
             break;

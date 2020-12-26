@@ -5,10 +5,13 @@ namespace App\Loaders;
 
 
 use App\DatabaseInterface;
+use App\Mappers\MappingColumn;
 use App\Mappers\MappingColumnInterface;
+use App\Mappers\MappingTable;
+use App\Mappers\MappingTableCollection;
 use App\Mappers\MappingTableInterface;
 
-class MysqlSchemaLoaderInterface implements SchemaLoaderInterface
+class MysqlSchemaLoader implements SchemaLoaderInterface
 {
     /**
      * @var DatabaseInterface
@@ -24,9 +27,20 @@ class MysqlSchemaLoaderInterface implements SchemaLoaderInterface
     public function createTable(MappingTableInterface $table)
     {
         $sql = "CREATE TABLE `{$table->getName()}` (";
+        $i=0;
 
         foreach ($table->getColumns() as $column) {
-            $sql .= "`{$column->getName()}` varchar (45), \n";
+            if($column->isDatetime())
+                $datatype = "DATETIME";
+            else
+                $datatype = "TEXT";
+
+            if($i) $sql.=",\n";
+
+            $sql .= "`{$column->getName()}` $datatype ";
+
+            $i++;
+
         }
 
         $sql .= ")";
@@ -70,6 +84,29 @@ class MysqlSchemaLoaderInterface implements SchemaLoaderInterface
 
     public function getSchemaTables()
     {
-        // TODO: Implement getSchemaTables() method.
+        $sql = "SELECT TABLE_NAME FROM information_schema.tables where table_schema = database() ";
+
+        $tables = $this->database->getAll($sql);
+        $map  = new MappingTableCollection();
+        if(!$tables) return $map;
+
+
+        foreach ($tables as $table){
+
+            $sql = "SELECT COLUMN_NAME  FROM information_schema.columns
+                    WHERE table_schema = database() AND table_name= '{$table->TABLE_NAME}' ";
+            $columns  = $this->database->getAll($sql);
+
+            if(!$columns) continue;
+
+            $map[$table->TABLE_NAME] = new MappingTable($table->TABLE_NAME);
+
+            foreach ($columns as $column){
+                $map[$table->TABLE_NAME]->appendColumn(new MappingColumn($column->COLUMN_NAME));
+            }
+
+        }
+
+        return $map;
     }
 }

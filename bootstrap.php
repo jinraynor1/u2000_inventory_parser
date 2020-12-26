@@ -18,7 +18,6 @@ $logger->pushHandler(new \Monolog\Handler\RotatingFileHandler(
 
 
 
-
 // build dependencies
 $builder = new DI\ContainerBuilder();
 
@@ -28,3 +27,4 @@ $builder->addDefinitions(APP_PATH . '/dependencies.php');
 $container = $builder->build();
 
 $container->set('app.config', $config);
+

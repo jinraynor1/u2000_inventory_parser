@@ -3,8 +3,6 @@
 
 namespace Test\Loaders;
 
-
-use App\DatabaseAdapter;
 use App\DatabaseInterface;
 use App\Loaders\FactorySchemaLoader;
 use App\Loaders\SchemaDetector;
@@ -14,7 +12,7 @@ use App\Mappers\MappingTable;
 use App\Mappers\MappingTableCollectionInterface;
 use App\Parsers\FactoryParser;
 
-class SchemaLoaderTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractSchemaLoader extends \PHPUnit_Framework_TestCase
 {
 
     /**
@@ -43,13 +41,8 @@ class SchemaLoaderTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
 
-        global $container;
-        $this->database = $container->get('database.master');
 
-
-        //$db = new \PDO($_ENV['DATABASE_DRIVER'] . ':' . $_ENV['DATABASE_DSN'], $_ENV['DATABASE_USER'], $_ENV['DATABASE_PASS']);
-        //$db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-        //$this->database = new DatabaseAdapter($db, $_ENV['DATABASE_QUOTE_IDENTIFIER']);
+        $this->database = $this->getDatabase();
 
         $factorySchemaLoader = new FactorySchemaLoader($this->database);
 
@@ -66,6 +59,11 @@ class SchemaLoaderTest extends \PHPUnit_Framework_TestCase
         $this->prepareTables();
 
     }
+
+    /**
+     * @return DatabaseInterface
+     */
+    abstract function getDatabase();
 
     private function dropTables()
     {
@@ -103,7 +101,7 @@ class SchemaLoaderTest extends \PHPUnit_Framework_TestCase
         $databaseMappingTableCollection = $this->specificSchemaLoader->getSchemaTables();
 
 
-        $this->assertNotEmpty($databaseMappingTableCollection);
+        $this->assertNotEmpty($databaseMappingTableCollection->getIterator());
         $this->assertFalse($databaseMappingTableCollection->mappingTableExists(new MappingTable("dummy_table")));
 
         $this->assertFalse($databaseMappingTableCollection->mappingTableExists(
@@ -113,7 +111,6 @@ class SchemaLoaderTest extends \PHPUnit_Framework_TestCase
 
 
         foreach ($this->fileMappingTableCollection as $table) {
-
             $this->assertTrue($databaseMappingTableCollection->mappingTableExists($table));
 
             foreach ($table->getColumns() as $column) {
@@ -136,16 +133,16 @@ class SchemaLoaderTest extends \PHPUnit_Framework_TestCase
         }
 
         $table_name_mo_tree = $this->database->quoteIdentifier("mo_tree");
-        $res = $this->database->get("SELECT COUNT(*) mo_tree_rows FROM $table_name_mo_tree ");
+        $res = $this->database->get("SELECT COUNT(*) MO_TREE_ROWS FROM $table_name_mo_tree ");
         $this->assertEquals(5, $res->MO_TREE_ROWS);
 
 
         $table_name_slot = $this->database->quoteIdentifier("Slot");
-        $res = $this->database->get("SELECT COUNT(*) slot_rows FROM $table_name_slot ");
+        $res = $this->database->get("SELECT COUNT(*) SLOT_ROWS FROM $table_name_slot ");
         $this->assertEquals(30, $res->SLOT_ROWS);
 
         $table_name_subrack = $this->database->quoteIdentifier("Subrack");
-        $res = $this->database->get("SELECT COUNT(*) subrack_rows FROM $table_name_subrack ");
+        $res = $this->database->get("SELECT COUNT(*) SUBRACK_ROWS FROM $table_name_subrack ");
         $this->assertEquals(20, $res->SUBRACK_ROWS);
 
 

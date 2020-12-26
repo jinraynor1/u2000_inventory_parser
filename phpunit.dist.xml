@@ -1,4 +1,4 @@
-<phpunit bootstrap="vendor/autoload.php">
+<phpunit bootstrap="bootstrap.php">
 
     <testsuites>
         <testsuite name="default">
@@ -7,11 +7,28 @@
     </testsuites>
     <php>
         <const  name="PHPUNIT_INVENTORY_PARSER_TESTSUITE" value="true"/>
-        <env name="DATABASE_USER" value="smithj"/>
-        <env name="DATABASE_PASS" value="pwd4smithj"/>
-        <env name="DATABASE_DSN" value="//localhost:1521/xe"/>
-        <env name="DATABASE_DRIVER" value="oci"/>
-        <env name="DATABASE_QUOTE_IDENTIFIER" value='"'/>
+
+        <!-- ORACLE -->
+
+        <env name="DATABASE_ORACLE_USER" value="smithj"/>
+        <env name="DATABASE_ORACLE_PASS" value="pwd4smithj"/>
+        <env name="DATABASE_ORACLE_DSN" value="dbname=(DESCRIPTION =(ADDRESS_LIST =(ADDRESS = (PROTOCOL = TCP)(HOST = oracle)(PORT = 1521)))(CONNECT_DATA =(SERVICE_NAME = xe)) )"/>
+        <env name="DATABASE_ORACLE_DRIVER" value="oci"/>
+        <env name="DATABASE_ORACLE_QUOTE_IDENTIFIER" value='"'/>
+        <env name="DATABASE_ORACLE_QUERIES_SESSION" >
+        <![CDATA[
+            ["alter session set nls_date_format='YYYY/MM/DD HH24:MI:SS'"]
+        ]]>
+        </env>
+
+
+        <!-- MYSQL -->
+
+        <env name="DATABASE_MYSQL_USER" value="smithj"/>
+        <env name="DATABASE_MYSQL_PASS" value="pwd4smithj"/>
+        <env name="DATABASE_MYSQL_DSN" value="mysql:host=mysql;port=3306;dbname=inventario"/>
+        <env name="DATABASE_MYSQL_DRIVER" value="mysql"/>
+        <env name="DATABASE_MYSQL_QUOTE_IDENTIFIER" value='`'/>
 
 
     </php>
