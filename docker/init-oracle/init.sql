@@ -26,8 +26,8 @@ GRANT create synonym TO smithj;
 ALTER SESSION SET CURRENT_SCHEMA = smithj;
 
 
-CREATE TABLE customers
-( customer_id number(10) NOT NULL,
-  customer_name varchar2(50) NOT NULL,
-  city varchar2(50)
+CREATE TABLE control_files
+( xml varchar2(250) NOT NULL,
+  registerDate DATE NOT NULL,
+  CONSTRAINT contro_files_pk PRIMARY KEY (xml)
 );

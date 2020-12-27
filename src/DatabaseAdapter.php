@@ -24,6 +24,70 @@ class DatabaseAdapter implements DatabaseInterface
         $this->quote_identifier_character = $quote_identifier_character;
     }
 
+    public function selectOne($table, array $columns, array $where = array(), $class_name = 'stdClass')
+    {
+        $sql = $this->buildSelect($table,$columns,$where);
+        $stmt = $this->db->query($sql);
+        if (!$stmt) return false;
+        return $stmt->fetchObject($class_name);
+    }
+
+    public function selectAll($table, array $columns, array $where = array(), $class_name = 'stdClass')
+    {
+        $sql = $this->buildSelect($table,$columns,$where);
+        $stmt = $this->db->query($sql);
+        if (!$stmt) return false;
+        return $stmt->fetchAll(\PDO::FETCH_CLASS, $class_name);
+
+    }
+
+
+    public function delete($table, array $where = array())
+    {
+        $table = $this->quoteIdentifier($table);
+        $where_string = null;
+
+        if(is_array($where) && !empty($where))
+            $where_string = "WHERE ";
+
+        $i=0;
+        foreach ($where as $k=>$v){
+            if($i>0) $where_string.= " AND ";
+
+            $where_string.= " ".$this->quoteIdentifier($k) ." = ". $this->db->quote($v);
+
+            $i++;
+        }
+
+        return  $this->run("DELETE FROM  $table $where_string");
+
+    }
+
+    private function buildSelect($table, array $columns, array $where = array())
+    {
+        $that = $this;
+        $columns_string  = implode(',',array_map(function ($val) use ($that) {
+            return $that->quoteIdentifier($val);
+        }, $columns));
+
+        $table = $this->quoteIdentifier($table);
+        $where_string = null;
+
+        if(is_array($where) && !empty($where))
+            $where_string = "WHERE ";
+
+        $i=0;
+        foreach ($where as $k=>$v){
+            if($i>0) $where_string.= " AND ";
+
+            $where_string.= " ".$this->quoteIdentifier($k) ." = ". $this->db->quote($v);
+
+            $i++;
+        }
+
+        return  "SELECT $columns_string FROM $table $where_string";
+
+    }
     /**
      * insert record
      *
