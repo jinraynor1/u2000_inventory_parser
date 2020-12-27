@@ -75,16 +75,16 @@ class MappingTableCollection implements MappingTableCollectionInterface
         $table = $this->tables[$mappingTable->getName()];
         return $table->columnExist($mappingColumn);
 
-        /*
-        foreach ($mappingTable->getColumns() as $column){
-
-            if($column->getName() == $mappingColumn->getName()){
-                return true;
-            }
-        }
-
-
-        return false;
-        */
     }
+
+    public function mappingIndexExists(MappingTableInterface $mappingTable, MappingIndexInterface $mappingIndex)
+    {
+        if(!$this->mappingTableExists($mappingTable)){
+            return false;
+        }
+        $table = $this->tables[$mappingTable->getName()];
+        return $table->indexExist($mappingIndex);
+
+    }
+
 }

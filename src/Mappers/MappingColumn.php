@@ -9,6 +9,9 @@ class MappingColumn implements  MappingColumnInterface
     private $columnName;
     private $columnValue;
     private $columnType;
+    private $columnLength;
+
+
 
     const COLUMN_TYPE_VARCHAR = 1;
     const COLUMN_TYPE_DATE = 2;
@@ -48,5 +51,20 @@ class MappingColumn implements  MappingColumnInterface
         return $this->columnType == self::COLUMN_TYPE_DATE;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getColumnLength()
+    {
+        return $this->columnLength;
+    }
+
+    /**
+     * @param mixed $columnLength
+     */
+    public function setColumnLength($columnLength)
+    {
+        $this->columnLength = $columnLength;
+    }
 
 }

@@ -23,7 +23,7 @@ class SchemaLoader
     private $schemaLoader;
 
     public function __construct(MappingTableCollectionInterface $mappingTableCollection,
-    SchemaLoaderInterface $schemaLoader)
+                                SchemaLoaderInterface $schemaLoader)
     {
 
         $this->mappingTableCollection = $mappingTableCollection;
@@ -32,13 +32,17 @@ class SchemaLoader
     }
 
 
-
     public function load()
     {
         foreach ($this->mappingTableCollection as $table) {
 
             if (!$this->schemaLoader->tableExists($table)) {
                 $this->schemaLoader->createTable($table);
+
+                if (!empty($table->getIndexes()))
+                    foreach ($table->getIndexes() as $index)
+                        $this->schemaLoader->createIndex($table, $index);
+
             } else {
                 $this->alterTable($table);
             }

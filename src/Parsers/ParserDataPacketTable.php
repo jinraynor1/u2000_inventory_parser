@@ -97,8 +97,9 @@ class ParserDataPacketTable   extends AbstractInventoryParser implements Invento
 
         $table = new MappingTable($this->buffer_row["@attributes"]["attrname"]);
 
-        $table->appendColumn($this->columnMBTS);
-        $table->appendColumn($this->columnDate);
+        $table->columnMBTS->setValue($this->columnMBTS->getValue());
+        $table->columnDate->setValue($this->columnDate->getValue());
+
 
         //if no more elements empty the buffer
         if(empty($this->buffer_row["ROWDATA"]["ROW"])){

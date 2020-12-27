@@ -7,50 +7,31 @@ namespace App\Loaders;
 use App\DatabaseInterface;
 use App\Mappers\MappingColumn;
 use App\Mappers\MappingColumnInterface;
+use App\Mappers\MappingIndexInterface;
 use App\Mappers\MappingTable;
 use App\Mappers\MappingTableCollection;
 use App\Mappers\MappingTableCollectionInterface;
 use App\Mappers\MappingTableInterface;
 
-class OracleSchemaLoader implements SchemaLoaderInterface
+class OracleSchemaLoader extends AbstractSchemaLoader implements SchemaLoaderInterface
 {
-    /**
-     * @var DatabaseInterface
-     */
-    private $database;
 
-    public function __construct(DatabaseInterface $database )
+
+    function getDataTypeDatetime()
     {
-
-        $this->database = $database;
-    }
-    public function createTable(MappingTableInterface $table)
-    {
-        $sql = "CREATE TABLE \"{$table->getName()}\" (";
-        $i=0;
-        foreach ($table->getColumns() as $column) {
-            if($column->isDatetime())
-                $datatype = "DATE";
-            else
-                $datatype = "varchar2 (4000)";
-
-            if($i) $sql.=",\n";
-            $sql .= "\"{$column->getName()}\" $datatype ";
-            $i++;
-        }
-
-        $sql.= ")";
-
-
-        $this->database->query($sql);
+        return "date";
     }
 
-    public function createColumn(MappingTableInterface $mappingTable, MappingColumnInterface $mappingColumn)
+    function getDataTypeVarChar()
     {
-        $sql = "ALTER TABLE \"{$mappingTable->getName()}\" ADD COLUMN \"{$mappingColumn->getName()}\" varchar2(4000)";
-        $this->database->query($sql);
-
+        return "varchar";
     }
+
+    function getDataTypeText()
+    {
+        return "varchar(4000)";
+    }
+
 
     public function tableExists(MappingTableInterface $mappingTable)
     {
@@ -64,46 +45,32 @@ class OracleSchemaLoader implements SchemaLoaderInterface
 
     }
 
-    public function columnExists(MappingTableInterface $mappingTable, MappingColumnInterface $mappingColumn)
+
+    function getTables()
     {
-        $sql="SELECT COUNT(*) \"exists\" FROM user_tab_cols WHERE table_name= '{$mappingTable->getName()}'
-    AND  column_name='{$mappingColumn->getName()}'";
 
-        $result = $this->database->get($sql);
+        $sql = "SELECT TABLE_NAME FROM user_tables ";
+        return $this->database->getAll($sql);
 
-        if (!$result) return false;
-
-        return $result->exists > 0;
     }
 
-    /**
-     * @return MappingTableCollectionInterface
-     */
-    public function getSchemaTables()
+    function getColumns(MappingTableInterface $mappingTable)
     {
-        $sql = "SELECT table_name FROM user_tables ";
+        $sql = "SELECT COLUMN_NAME  FROM user_tab_cols WHERE table_name= '{$mappingTable->getName()}' ";
+        return $this->database->getAll($sql);
+    }
 
-        $tables = $this->database->getAll($sql);
-        $map  = new MappingTableCollection();
-        if(!$tables) return $map;
+    function getIndexes(MappingTableInterface $mappingTable)
+    {
+        $sql = "SELECT DISTINCT INDEX_NAME FROM USER_IND_COLUMNS WHERE TABLE_NAME = '{$mappingTable->getName()}'";
+        return $this->database->getAll($sql);
 
+    }
 
-        foreach ($tables as $table){
-
-            $sql = "SELECT column_name  FROM user_tab_cols WHERE table_name= '{$table->TABLE_NAME}' ";
-            $columns  = $this->database->getAll($sql);
-
-            if(!$columns) continue;
-
-            $map[$table->TABLE_NAME] = new MappingTable($table->TABLE_NAME);
-
-            foreach ($columns as $column){
-                $map[$table->TABLE_NAME]->appendColumn(new MappingColumn($column->COLUMN_NAME));
-            }
-
-        }
-
-        return $map;
+    function getColumnIndexes(MappingTableInterface $mappingTable, MappingIndexInterface $mappingIndex)
+    {
+        $sql = "SELECT COLUMN_NAME FROM USER_IND_COLUMNS WHERE TABLE_NAME = '{$mappingTable->getName()}'";
+        return $this->database->getAll($sql);
     }
 
 

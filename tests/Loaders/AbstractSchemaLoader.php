@@ -8,6 +8,7 @@ use App\Loaders\FactorySchemaLoader;
 use App\Loaders\SchemaDetector;
 use App\Loaders\SchemaLoaderInterface;
 use App\Mappers\MappingColumn;
+use App\Mappers\MappingIndex;
 use App\Mappers\MappingTable;
 use App\Mappers\MappingTableCollectionInterface;
 use App\Parsers\FactoryParser;
@@ -117,6 +118,11 @@ abstract class AbstractSchemaLoader extends \PHPUnit_Framework_TestCase
                 $this->assertTrue($databaseMappingTableCollection->mappingColumnsExists($table, $column));
             }
 
+            foreach ($table->getIndexes() as $index){
+                $this->assertTrue($databaseMappingTableCollection->mappingIndexExists($table, $index));
+
+            }
+
 
         }
     }
@@ -136,16 +142,32 @@ abstract class AbstractSchemaLoader extends \PHPUnit_Framework_TestCase
         $res = $this->database->get("SELECT COUNT(*) MO_TREE_ROWS FROM $table_name_mo_tree ");
         $this->assertEquals(5, $res->MO_TREE_ROWS);
 
+        $this->assertTrue($this->specificSchemaLoader->indexExists(
+            new MappingTable("mo_tree"),
+            new MappingIndex("idx_Def1_mo_tree"))
+        );
+
 
         $table_name_slot = $this->database->quoteIdentifier("Slot");
         $res = $this->database->get("SELECT COUNT(*) SLOT_ROWS FROM $table_name_slot ");
         $this->assertEquals(30, $res->SLOT_ROWS);
 
+
+        $this->assertTrue($this->specificSchemaLoader->indexExists(
+            new MappingTable("Slot"),
+            new MappingIndex("idx_Def1_Slot"))
+        );
+
+
+
         $table_name_subrack = $this->database->quoteIdentifier("Subrack");
         $res = $this->database->get("SELECT COUNT(*) SUBRACK_ROWS FROM $table_name_subrack ");
         $this->assertEquals(20, $res->SUBRACK_ROWS);
 
-
+        $this->assertTrue($this->specificSchemaLoader->indexExists(
+            new MappingTable("Subrack"),
+            new MappingIndex("idx_Def1_Subrack"))
+        );
 
 
 

@@ -83,8 +83,13 @@ class ParserMoTree extends AbstractInventoryParser implements InventoryParserInt
         $simple_xml =  simplexml_import_dom($this->doc->importNode($this->z->expand(), true));
 
         $table = new MappingTable("mo_tree");
-        $table->appendColumn($this->columnMBTS);
-        $table->appendColumn($this->columnDate);
+
+        $table->columnMBTS->setValue($this->columnMBTS->getValue());
+        $table->columnDate->setValue($this->columnDate->getValue());
+
+
+        //$table->appendColumn($this->columnMBTS);
+        //$table->appendColumn($this->columnDate);
 
         foreach ($simple_xml as $item){
            // $childrens = $item->children();

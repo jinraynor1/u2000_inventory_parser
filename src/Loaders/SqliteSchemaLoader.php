@@ -7,44 +7,27 @@ namespace App\Loaders;
 use App\DatabaseInterface;
 use App\Mappers\MappingColumn;
 use App\Mappers\MappingColumnInterface;
+use App\Mappers\MappingIndexInterface;
 use App\Mappers\MappingTable;
 use App\Mappers\MappingTableCollection;
 use App\Mappers\MappingTableCollectionInterface;
 use App\Mappers\MappingTableInterface;
 
-class SqliteSchemaLoader implements SchemaLoaderInterface
+class SqliteSchemaLoader extends AbstractSchemaLoader implements SchemaLoaderInterface
 {
-    /**
-     * @var DatabaseInterface
-     */
-    private $database;
-
-    public function __construct(DatabaseInterface $database )
+    function getDataTypeDatetime()
     {
-
-        $this->database = $database;
-    }
-    public function createTable(MappingTableInterface $table)
-    {
-        $sql = "CREATE TABLE `{$table->getName()}` (";
-        $i=0;
-        foreach ($table->getColumns() as $column) {
-            if($i) $sql.=",\n";
-            $sql .= "`{$column->getName()}` text ";
-            $i++;
-        }
-
-        $sql.= ")";
-
-
-        $this->database->query($sql);
+        return "text";
     }
 
-    public function createColumn(MappingTableInterface $mappingTable, MappingColumnInterface $mappingColumn)
+    function getDataTypeVarChar()
     {
-        $sql = "ALTER TABLE `{$mappingTable->getName()}` ADD COLUMN `{$mappingColumn->getName()}` text";
-        $this->database->query($sql);
+        return "text";
+    }
 
+    function getDataTypeText()
+    {
+        return "text";
     }
 
     public function tableExists(MappingTableInterface $mappingTable)
@@ -59,44 +42,48 @@ class SqliteSchemaLoader implements SchemaLoaderInterface
 
     }
 
-    public function columnExists(MappingTableInterface $mappingTable, MappingColumnInterface $mappingColumn)
+
+    function getTables()
     {
-        $sql="SELECT COUNT(*) AS `exists` FROM pragma_table_info('{$mappingTable->getName()}') WHERE name='{$mappingColumn->getName()}'";
-
-        $result = $this->database->get($sql);
-
-
-        if (!$result) return false;
-
-        return $result->exists > 0;
+        $sql = "SELECT tbl_name TABLE_NAME FROM sqlite_master WHERE type='table'";
+        return $this->database->getAll($sql);
     }
 
-    /**
-     * @return MappingTableCollectionInterface
-     */
-    public function getSchemaTables()
+    function getColumns(MappingTableInterface $mappingTable)
     {
-        $sql = "SELECT tbl_name FROM sqlite_master WHERE type='table'";
+        $sql = "PRAGMA Table_Info('{$mappingTable->getName()}') ";
+        $result = $this->database->getAll($sql);
+        return $this->parseNameResult($result,"COLUMN_NAME");
 
-        $tables = $this->database->getAll($sql);
-        $map  = new MappingTableCollection();
-        if(!$tables) return $map;
+    }
 
-        foreach ($tables as $table){
+    function getIndexes(MappingTableInterface $mappingTable)
+    {
+        $sql = "PRAGMA index_list('{$mappingTable->getName()}') ";
+        $result =  $this->database->getAll($sql);
+        return $this->parseNameResult($result,"INDEX_NAME");
 
-            $sql = "PRAGMA Table_Info('{$table->tbl_name}') ";
-            $columns  = $this->database->getAll($sql);
 
-            if(!$columns) continue;
+    }
 
-            $map[$table->tbl_name] = new MappingTable($table->tbl_name);
+    function getColumnIndexes(MappingTableInterface $mappingTable, MappingIndexInterface $mappingIndex)
+    {
+        $sql = "PRAGMA index_xinfo('{$mappingIndex->getName()}') ";
+        $result =  $this->database->getAll($sql);
+        return $this->parseNameResult($result,"COLUMN_NAME");
+    }
 
-            foreach ($columns as $column){
-                $map[$table->tbl_name]->appendColumn(new MappingColumn($column->name));
+    private function parseNameResult($result,$field_name)
+    {
+        $list = [];
+        if($result){
+            foreach ($result as $row){
+                if($row->name){
+                    $list[] = (object)array($field_name => $row->name);
+                }
             }
-
         }
-
-        return $map;
+        return $list;
     }
+
 }

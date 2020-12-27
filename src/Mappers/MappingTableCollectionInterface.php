@@ -17,4 +17,6 @@ interface MappingTableCollectionInterface extends \IteratorAggregate,\ArrayAcces
 
     public function mappingColumnsExists(MappingTableInterface $mappingTable, MappingColumnInterface $mappingColumn);
 
+    public function mappingIndexExists(MappingTableInterface $mappingTable, MappingIndexInterface $mappingIndex);
+
 }

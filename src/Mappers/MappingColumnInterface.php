@@ -11,5 +11,9 @@ interface MappingColumnInterface
     public function getType();
     public function setValue($value);
     public function setType($type);
+    public function getColumnLength();
+    public function setColumnLength($columnLength);
+
+
 
 }
