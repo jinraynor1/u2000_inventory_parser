@@ -28,6 +28,11 @@ class ControlFilesTest extends \PHPUnit_Framework_TestCase
         $this->database->delete("control_files");
     }
 
+    public function tearDown()
+    {
+        $this->database->delete("control_files");
+    }
+
     public function testInsertFiles()
     {
         $fileList = [

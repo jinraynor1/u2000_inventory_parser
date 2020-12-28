@@ -41,12 +41,17 @@ class ControlFiles
     public function insertFiles(array $fileList)
     {
         foreach ($fileList as $file){
-            $this->database->insert('control_files',array(
-                'xmlFile'=>$file->getBasename(),
-                'registerDate' => date('Y-m-d H:i:s')
-            ));
+           $this->insertSingleFile($file);
         }
 
+    }
+
+    public function insertSingleFile(\SplFileInfo $fileInfo)
+    {
+        $this->database->insert('control_files',array(
+            'xmlFile'=>$fileInfo->getBasename(),
+            'registerDate' => date('Y-m-d H:i:s')
+        ));
     }
 
 }

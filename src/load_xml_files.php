@@ -1,8 +1,42 @@
 <?php
 
+use App\Files\SearchLocalFiles;
+use App\Files\ControlFiles;
+use App\Loaders\FactorySchemaLoader;
+use App\Parsers\FactoryParser;
+use \App\Loaders\DBLoader;
 require_once __DIR__ . '/../bootstrap.php';
 
+global $container;
+
 $db = $container->get('database.master');
+
+$searchPath = APP_PATH .'/samples';
+$fromTime =new DateTime("1 month ago");
+$toTime = new DateTime("now");
+$searchFiles = new SearchLocalFiles();
+$fileList = $searchFiles->findFiles($searchPath,$fromTime,$toTime,"xml");
+
+$controlFiles = new ControlFiles($db);
+$fileList = $controlFiles->filterFiles($fileList);
+
+$factorySchemaLoader = new FactorySchemaLoader($db);
+$specificSchemaLoader = $factorySchemaLoader->getSpecificSchemaLoader();
+$databaseMappingTableCollection = $specificSchemaLoader->getSchemaTables();
+$loader = new DBLoader($db, $databaseMappingTableCollection);
+
+foreach($fileList as $fileInfo){
+    $parser =  FactoryParser::getParserForFile($fileInfo);
+    $loader->loadParserToDatabase($parser);
+    $controlFiles->insertSingleFile($fileInfo);
+}
+
+
+
+
+
+
+
 
 //$xmlFileMoTree = new \SplFileInfo(APP_PATH .'/samples/mo_tree.xml');
 //$parser = new \App\Parsers\ParserMoTree($xmlFileMoTree);
