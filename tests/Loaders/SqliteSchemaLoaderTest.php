@@ -4,7 +4,7 @@ namespace Test\Loaders;
 require_once __DIR__ .'/AbstractSchemaLoader.php';
 
 
-class MysqlSchemaLoaderTest extends AbstractSchemaLoader
+class SqliteSchemaLoaderTest extends AbstractSchemaLoader
 {
 
     public function getDatabase()

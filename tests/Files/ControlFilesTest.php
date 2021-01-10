@@ -6,6 +6,7 @@ namespace Files;
 
 use App\DatabaseInterface;
 use App\Files\ControlFiles;
+use App\Loaders\LoaderResult;
 
 class ControlFilesTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,30 +26,32 @@ class ControlFilesTest extends \PHPUnit_Framework_TestCase
         $this->database  = $container->get('database.phpunit.oracle');
 
         $this->controlFiles = new ControlFiles($this->database);
-        $this->database->delete("control_files");
+        $this->database->delete("ControlFiles");
     }
 
     public function tearDown()
     {
-        $this->database->delete("control_files");
+        $this->database->delete("ControlFiles");
     }
 
     public function testInsertFiles()
     {
+        $loaderResult = $this->getMock(LoaderResult::class);
+
+        $this->controlFiles->insertFile(new \SplFileInfo("file1.xml") ,$loaderResult);
+        $this->controlFiles->insertFile(new \SplFileInfo("file2.xml") ,$loaderResult);
+        $this->controlFiles->insertFile(new \SplFileInfo("file3.xml") ,$loaderResult);
+
+        $result = $this->database->selectAll("ControlFiles",array("xml"));
+        $this->assertCount(3 , $result);
+
+
         $fileList = [
             new \SplFileInfo("file1.xml"),
             new \SplFileInfo("file2.xml"),
             new \SplFileInfo("file3.xml"),
+            new \SplFileInfo("file4.xml")
         ];
-
-        $this->controlFiles->insertFiles($fileList);
-
-        $result = $this->database->selectAll("control_files",array("xmlFile"));
-        $this->assertCount(3 , $result);
-
-        array_push($fileList,
-                new \SplFileInfo("file4.xml")
-        );
 
         $filteredFileList = $this->controlFiles->filterFiles($fileList);
 
@@ -62,14 +65,13 @@ class ControlFilesTest extends \PHPUnit_Framework_TestCase
 
     public function testThrowExceptionForDuplicateFile()
     {
-        $fileList = [
-            new \SplFileInfo("file1.xml"),
-        ];
 
-        $this->controlFiles->insertFiles($fileList);
+        $loaderResult = $this->getMock(LoaderResult::class);
+
+        $this->controlFiles->insertFile(  new \SplFileInfo("file1.xml"),$loaderResult);
 
         $this->setExpectedException(\PDOException::class);
-        $this->controlFiles->insertFiles($fileList);
+        $this->controlFiles->insertFile(  new \SplFileInfo("file1.xml"),$loaderResult);
 
     }
 }

@@ -37,15 +37,24 @@ class DBLoader
 
     public function loadParserToDatabase(InventoryParserInterface $parser)
     {
+        $loaderResult = new LoaderResult();
         foreach ($parser as $table){
             $table =  $this->getExistingElements($table);
 
+            if(!$table) {
+                $loaderResult->addSkipeed($table);
+                continue;
+            }
 
-            if(!$table) continue;
-
-            $this->database->insert($table->getName(),$table->getColumnsAsKeyValue());
+            try {
+                $this->database->insert($table->getName(), $table->getColumnsAsKeyValue());
+                $loaderResult->addSuccess($table);
+            } catch (\Exception $e) {
+                $loaderResult->addFailed($table);
+            }
 
         }
+        return $loaderResult;
     }
 
     /**
