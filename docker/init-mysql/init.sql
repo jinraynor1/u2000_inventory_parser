@@ -6,8 +6,8 @@ GRANT ALL PRIVILEGES ON inventario.* TO 'smithj'@'%';
 
 USE inventario;
 
-CREATE TABLE control_files
-( xml varchar(250) NOT NULL,
-  registerDate datetime NOT NULL,
-  PRIMARY KEY (xml)
+CREATE TABLE `control_files`
+( `xml` varchar(250) NOT NULL,
+    `registerDate` datetime NOT NULL,
+    PRIMARY KEY (`xml`)
 );

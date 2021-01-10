@@ -24,12 +24,12 @@ class OracleSchemaLoader extends AbstractSchemaLoader implements SchemaLoaderInt
 
     function getDataTypeVarChar()
     {
-        return "varchar";
+        return "varchar2(250)";
     }
 
     function getDataTypeText()
     {
-        return "varchar(4000)";
+        return "varchar2(4000)";
     }
 
 

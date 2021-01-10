@@ -11,13 +11,13 @@ require_once __DIR__ . '/../bootstrap.php';
 
 global $container;
 global $logger;
-
+global $config;
 try {
 
     $db = $container->get('database.master');
 
-    $searchPath = APP_PATH . '/samples';
-    $fromTime = new DateTime("2 month ago");
+    $searchPath = $config->get('file_scanner.path');
+    $fromTime = new DateTime($config->get('file_scanner.search_time'));
     $toTime = new DateTime("now");
     $searchFiles = new SearchLocalFiles();
     $fileList = $searchFiles->findFiles($searchPath, $fromTime, $toTime, "xml");

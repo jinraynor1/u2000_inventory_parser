@@ -22,7 +22,7 @@ class MysqlSchemaLoader extends AbstractSchemaLoader implements SchemaLoaderInte
 
     function getDataTypeVarChar()
     {
-        return "varchar";
+        return "varchar(250)";
     }
 
     function getDataTypeText()

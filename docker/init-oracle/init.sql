@@ -26,8 +26,8 @@ GRANT create synonym TO smithj;
 ALTER SESSION SET CURRENT_SCHEMA = smithj;
 
 
-CREATE TABLE control_files
-( xml varchar2(250) NOT NULL,
-  registerDate DATE NOT NULL,
-  CONSTRAINT contro_files_pk PRIMARY KEY (xml)
+CREATE TABLE "control_files"
+( "xml" varchar2(250) NOT NULL,
+  "registerDate" DATE NOT NULL,
+  CONSTRAINT contro_files_pk PRIMARY KEY ("xml")
 );

@@ -39,12 +39,14 @@ abstract class AbstractSchemaLoader
         $i = 0;
 
         foreach ($table->getColumns() as $column) {
-            if ($column->isDatetime())
+            if ($column->isDatetime()){
                 $datatype = $this->getDataTypeDatetime();
-            elseif ($column->getColumnLength())
-                $datatype = $this->getDataTypeVarChar() . "({$column->getColumnLength()})";
-            else
+            }elseif ($column->getColumnLength()){
+                $varchar =  preg_replace('/\(.*\)/','',$this->getDataTypeVarChar());
+                $datatype = $varchar . "({$column->getColumnLength()})";
+            }else{
                 $datatype = $this->getDataTypeText();
+            }
 
             if ($i) $sql .= ",\n";
 
@@ -88,7 +90,7 @@ abstract class AbstractSchemaLoader
         $column_name = $this->database->quoteIdentifier($mappingColumn->getName());
 
 
-        $sql = "ALTER TABLE $table_name ADD COLUMN $column_name ". $this->getDataTypeText();
+        $sql = "ALTER TABLE $table_name ADD $column_name ". $this->getDataTypeText();
         $this->database->query($sql);
 
     }

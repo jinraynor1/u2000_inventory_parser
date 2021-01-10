@@ -1,5 +1,6 @@
 <?php
 
 return array(
-    'path' => '/data/'
+    'path' => APP_PATH . '/samples',
+    'search_time' => '1 year ago',
 );
