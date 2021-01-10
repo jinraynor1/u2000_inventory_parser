@@ -8,6 +8,8 @@
     <php>
         <const name="PHPUNIT_YOURAPPLICATION_TESTSUITE" value="true"/>
 
+        <const name="PHPUNIT_CURRENT_DATABASE_TYPE" value="MYSQL"/>
+
         <!-- ORACLE -->
 
         <env name="DATABASE_ORACLE_USER" value="smithj"/>

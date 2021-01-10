@@ -5,6 +5,7 @@ namespace App\Files;
 
 
 use App\DatabaseInterface;
+use App\Loaders\LoaderResult;
 
 class ControlFiles
 {
@@ -29,7 +30,7 @@ class ControlFiles
 
         foreach ($fileList as $file){
 
-            $result = $this->database->selectOne("control_files",array("xml"),array("xml"=>$file->getBasename() ));
+            $result = $this->database->selectOne("ControlFiles",array("xml"),array("xml"=>$file->getBasename() ));
 
             if(!$result){
                 $nonExistingFiles[] = $file;
@@ -38,20 +39,35 @@ class ControlFiles
         return $nonExistingFiles;
     }
 
-    public function insertFiles(array $fileList)
+
+    public function insertFile(\SplFileInfo $fileInfo, LoaderResult $loaderResult)
     {
-        foreach ($fileList as $file){
-           $this->insertSingleFile($file);
-        }
+        $this->database->insert('ControlFiles',array(
+            'xml'=>$fileInfo->getBasename(),
+            'registerDate' => date('Y-m-d H:i:s'),
+            'recordsInserted'=> $loaderResult->getSuccess(),
+            'recordsFailed'=> $loaderResult->getFailed(),
+            'recordsSkipped'=> $loaderResult->getSkipped(),
+        ));
+
 
     }
 
-    public function insertSingleFile(\SplFileInfo $fileInfo)
+    public function insertFileDetail(\SplFileInfo $fileInfo, LoaderResult $loaderResult)
     {
-        $this->database->insert('control_files',array(
-            'xml'=>$fileInfo->getBasename(),
-            'registerDate' => date('Y-m-d H:i:s')
-        ));
+        foreach ($loaderResult->getResultsDetailed() as $result){
+            $this->database->insert('ControlFilesDetails',array(
+                'xml'=>$fileInfo->getBasename(),
+                'table'=>$result->getTableName(),
+                'recordsInserted'=> $result->getSuccess(),
+                'recordsFailed'=> $result->getFailed(),
+                'recordsSkipped'=> $result->getSkipped(),
+            ));
+
+
+        }
+
+
     }
 
 }

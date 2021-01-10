@@ -44,14 +44,16 @@ return [
         if (!defined('PHPUNIT_YOURAPPLICATION_TESTSUITE') || !PHPUNIT_YOURAPPLICATION_TESTSUITE)
             throw new Exception("you cannot fetch database in non phpunit mote ");
 
+        $db_type = PHPUNIT_CURRENT_DATABASE_TYPE;
 
-        $db_username = $_ENV['DATABASE_ORACLE_USER'];
-        $db_password = $_ENV['DATABASE_ORACLE_PASS'];
-        $db_driver = $_ENV['DATABASE_ORACLE_DRIVER'];
-        $db_dsn = $_ENV['DATABASE_ORACLE_DSN'];
 
-        $quote_identifier_character = $_ENV['DATABASE_ORACLE_QUOTE_IDENTIFIER'];
-        $queries_session = json_decode($_ENV['DATABASE_ORACLE_QUERIES_SESSION'], true);
+        $db_username = $_ENV['DATABASE_'.$db_type.'_USER'];
+        $db_password = $_ENV['DATABASE_'.$db_type.'_PASS'];
+        $db_driver = $_ENV['DATABASE_'.$db_type.'_DRIVER'];
+        $db_dsn = $_ENV['DATABASE_'.$db_type.'_DSN'];
+
+        $quote_identifier_character = $_ENV['DATABASE_'.$db_type.'_QUOTE_IDENTIFIER'];
+        $queries_session = json_decode($_ENV['DATABASE_'.$db_type.'_QUERIES_SESSION'], true);
 
 
         return $c->get('internal.fetchAdapter')

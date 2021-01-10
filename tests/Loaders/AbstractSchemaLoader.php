@@ -138,13 +138,13 @@ abstract class AbstractSchemaLoader extends \PHPUnit_Framework_TestCase
 
         }
 
-        $table_name_mo_tree = $this->database->quoteIdentifier("mo_tree");
+        $table_name_mo_tree = $this->database->quoteIdentifier("MoTree");
         $res = $this->database->get("SELECT COUNT(*) MO_TREE_ROWS FROM $table_name_mo_tree ");
         $this->assertEquals(5, $res->MO_TREE_ROWS);
 
         $this->assertTrue($this->specificSchemaLoader->indexExists(
-            new MappingTable("mo_tree"),
-            new MappingIndex("idx_Def1_mo_tree"))
+            new MappingTable("MoTree"),
+            new MappingIndex("idx_Def1_MoTree"))
         );
 
 

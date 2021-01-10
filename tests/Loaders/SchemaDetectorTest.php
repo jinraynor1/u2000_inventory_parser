@@ -27,7 +27,7 @@ class SchemaDetectorTest extends \PHPUnit_Framework_TestCase
 
 
 
-        $this->assertTrue($mappingTableCollection->mappingColumnsExists(new MappingTable("mo_tree"),
+        $this->assertTrue($mappingTableCollection->mappingColumnsExists(new MappingTable("MoTree"),
         new MappingColumn("fdn")));
 
 

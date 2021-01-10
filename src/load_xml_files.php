@@ -48,7 +48,13 @@ try {
             continue;
         }
         foreach ($parser as $table) {
-            $schemaLoader->loadTableSchema($table);
+
+            try {
+                $schemaLoader->loadTableSchema($table);
+            } catch (Exception $e) {
+
+                $logger->critical($e);
+            }
         }
     }
 
@@ -65,9 +71,15 @@ try {
             $logger->warning("loading step: no parser for file {$fileInfo->getBasename()}");
             continue;
         }
-        $loader->loadParserToDatabase($parser);
+        $loaderResult =  $loader->loadParserToDatabase($parser);
+
+
+
+
         $logger->info("processing file {$fileInfo->getBasename()}");
-        $controlFiles->insertSingleFile($fileInfo);
+
+        $controlFiles->insertFile($fileInfo,$loaderResult);
+        $controlFiles->insertFileDetail($fileInfo, $loaderResult);
     }
 
 
