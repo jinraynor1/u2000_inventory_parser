@@ -93,18 +93,6 @@ abstract class AbstractSchemaLoader
 
     }
 
-    public function columnExists(MappingTableInterface $mappingTable, MappingColumnInterface $mappingColumn)
-    {
-        $columns = $this->getColumns($mappingTable);
-
-        foreach ($columns as $column){
-            if($column->COLUMN_NAME == $mappingColumn->getName()){
-                return true;
-            }
-        }
-
-        return false;
-    }
 
     public function indexExists(MappingTableInterface $mappingTable, MappingIndexInterface $mappingIndex)
     {

@@ -27,7 +27,7 @@ class DatabaseAdapter implements DatabaseInterface
     public function selectOne($table, array $columns, array $where = array(), $class_name = 'stdClass')
     {
         $sql = $this->buildSelect($table,$columns,$where);
-        $stmt = $this->db->query($sql);
+        $stmt = $this->query($sql);
         if (!$stmt) return false;
         return $stmt->fetchObject($class_name);
     }
@@ -35,7 +35,7 @@ class DatabaseAdapter implements DatabaseInterface
     public function selectAll($table, array $columns, array $where = array(), $class_name = 'stdClass')
     {
         $sql = $this->buildSelect($table,$columns,$where);
-        $stmt = $this->db->query($sql);
+        $stmt = $this->query($sql);
         if (!$stmt) return false;
         return $stmt->fetchAll(\PDO::FETCH_CLASS, $class_name);
 
@@ -164,7 +164,7 @@ class DatabaseAdapter implements DatabaseInterface
     private function run($sql, $args = array())
     {
         if (empty($args)) {
-            return $this->db->query($sql);
+            return $this->query($sql);
         }
 
         $stmt = $this->db->prepare($sql);
@@ -175,23 +175,24 @@ class DatabaseAdapter implements DatabaseInterface
 
     /**
      * @param $sql
-     * @return false2|\PDOStatement
+     * @return false|\PDOStatement
      */
     public function query($sql)
     {
+        //echo "$sql\n";
         return $this->db->query($sql);
     }
 
     public function getAll($sql, $class_name = 'stdClass')
     {
-        $stmt = $this->db->query($sql);
+        $stmt = $this->query($sql);
         if (!$stmt) return false;
         return $stmt->fetchAll(\PDO::FETCH_CLASS, $class_name);
     }
 
     public function get($sql, $class_name = 'stdClass')
     {
-        $stmt = $this->db->query($sql);
+        $stmt = $this->query($sql);
         if (!$stmt) return false;
         return $stmt->fetchObject($class_name);
     }

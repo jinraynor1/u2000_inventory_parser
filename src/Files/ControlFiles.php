@@ -29,7 +29,7 @@ class ControlFiles
 
         foreach ($fileList as $file){
 
-            $result = $this->database->selectOne("control_files",array("xmlFile"),array("xmlFile"=>$file->getBasename() ));
+            $result = $this->database->selectOne("control_files",array("xml"),array("xml"=>$file->getBasename() ));
 
             if(!$result){
                 $nonExistingFiles[] = $file;
@@ -49,7 +49,7 @@ class ControlFiles
     public function insertSingleFile(\SplFileInfo $fileInfo)
     {
         $this->database->insert('control_files',array(
-            'xmlFile'=>$fileInfo->getBasename(),
+            'xml'=>$fileInfo->getBasename(),
             'registerDate' => date('Y-m-d H:i:s')
         ));
     }

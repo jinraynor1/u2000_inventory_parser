@@ -91,8 +91,8 @@ abstract class AbstractSchemaLoader extends \PHPUnit_Framework_TestCase
         $this->fileMappingTableCollection = $schemaDetector->detect();
 
 
-        $schemaLoader = new \App\Loaders\SchemaLoader($this->fileMappingTableCollection, $this->specificSchemaLoader);
-        $schemaLoader->load();
+        $schemaLoader = new \App\Loaders\SchemaLoader($this->specificSchemaLoader);
+        $schemaLoader->loadTableSchemaCollection($this->fileMappingTableCollection);
     }
 
     public function testSchemaLoader()

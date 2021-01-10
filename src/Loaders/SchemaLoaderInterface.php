@@ -26,4 +26,8 @@ interface SchemaLoaderInterface
      * @return MappingTableInterface
      */
     public function getSchemaTables();
+
+    public function getColumns(MappingTableInterface $mappingTable);
+
+
 }

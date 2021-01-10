@@ -44,6 +44,18 @@ class MysqlSchemaLoader extends AbstractSchemaLoader implements SchemaLoaderInte
 
     }
 
+    public function columnExists(MappingTableInterface $mappingTable, MappingColumnInterface  $mappingColumn)
+    {
+        $result = $this->database->get("SELECT COUNT(*) AS `exists` FROM information_schema.columns 
+            WHERE table_schema = DATABASE()
+            AND table_name = '{$mappingTable->getName()}' AND column_name= '{$mappingColumn->getName()}'  ");
+
+
+        if (!$result) return false;
+
+        return $result->exists > 0;
+
+    }
 
 
 

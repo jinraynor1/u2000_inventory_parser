@@ -42,6 +42,15 @@ class SqliteSchemaLoader extends AbstractSchemaLoader implements SchemaLoaderInt
 
     }
 
+    public function columnExists(MappingTableInterface $mappingTable, MappingColumnInterface $mappingColumn)
+    {
+        $sql = "SELECT COUNT(*) AS `exists` FROM pragma_table_info('{$mappingTable->getName()}') WHERE name='{$mappingColumn->getName()}'";
+        $result = $this->database->get($sql);
+
+        if (!$result) return false;
+        return $result->exists > 0;
+    }
+
 
     function getTables()
     {

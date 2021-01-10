@@ -5,3 +5,5 @@ config/file_scanner.sample.php
 src/database.sqlite
 database.sqlite
 phpunit.xml
+logs/*
+!logs/.gitignore
